@@ -1,0 +1,23 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow strict-local
+ */
+
+import React from 'react';
+import {TextInput, Text, View} from 'react-native';
+
+export default function App() {
+  const [text, onChangeText] = React.useState('');
+
+  return (
+    <View testID="welcome">
+      <Text>Read the docs to discover what to do next:</Text>
+      <TextInput onChangeText={onChangeText} value={text} testID="textField" />
+      <Text testID="output">You entered {text}</Text>
+      <Text accessibilityLabel="sampleLabel">Retrived by label</Text>
+    </View>
+  );
+}
