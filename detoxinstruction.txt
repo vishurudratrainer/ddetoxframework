@@ -1,0 +1,77 @@
+Step 1: Installing detox cli and package
+Install the detox command line tool globally in your machine
+npm install -g detox-cli
+Next go to your react-native app repository and install detox package
+yarn add detox -D
+Step 2: Making changes to android/build.gradle file
+Add following configuration inside allprojects.repositories
+maven {
+    // All of Detox' artifacts are provided via the npm module
+    url "$rootDir/../node_modules/detox/Detox-android"
+}
+2. Change minSdkVersion to 18 and add kotlinVersion = "1.3.41" in ext block
+
+ext {
+    buildToolsVersion = "28.0.3"
+    minSdkVersion = 18
+    compileSdkVersion = 28
+    targetSdkVersion = 28
+    kotlinVersion = "1.3.41"
+}
+3. Add the Kotlin Gradle-plugin to your classpath
+
+dependencies {
+    classpath("com.android.tools.build:gradle:3.4.2")
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+
+    // NOTE: Do not place your application dependencies here;
+    // they belong in the individual module build.gradle files
+}
+Step 3: Making changes to app/build.gradle file
+Add the following two lines in android.defaultConfig block
+defaultConfig {
+  testBuildType System.getProperty('testBuildType', 'debug')
+  testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+}
+2. Add the following line in android.buildTypes.release block
+
+// Detox-specific additions to pro-guard
+proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
+3. Add the following lines in dependencies section
+
+androidTestImplementation('com.wix:detox:+') { transitive = true }
+androidTestImplementation 'junit:junit:4.12'
+implementation "androidx.annotation:annotation:1.1.0"
+Step 4: Creating DetoxTest.java
+Add the file android/app/src/androidTest/java/com/[your.package]/DetoxTest.java. Don’t forget to change the package name to your project’s.
+
+Refer DetoxTest.java for content.
+
+Step 5: detox configuration in package.json
+Hit detox init -r jest to use jest as test-runner. Its output will be something like-
+detox[27185] INFO:[init.js] Created a file at path:e2e/config.json
+detox[27185] INFO:[init.js] Created a file at path: e2e/init.js
+detox[27185] INFO:[init.js] Created a file at path: e2e/firstTest.spec.js
+detox[27185] INFO:[init.js] Patching package.json at path:
+detox[27185] INFO:[init.js] json["detox"]["test-runner"] = "jest";
+Above command will create init and configuration files in ./src/e2e folder.
+
+2. Add the following configuration inside package.json-
+
+"detox": {
+    "configurations": {
+      "android.emu.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.emulator",
+        "name": "Nexus_4_API_23"
+      },
+      "android.emu.release": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+        "build": "cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.emulator",
+        "name": "Nexus_4_API_23"
+      }
+    },
+    "test-runner": "jest"
+  }
