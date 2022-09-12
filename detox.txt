@@ -1,0 +1,176 @@
+ npm install -g react-native-cli@latest
+~ react-native init testReactNativeDetox
+~ cd testReactNativeDetox
+~ react-native run-ios
+npm install -g detox-cli
+ cd "C:\testReactNativeDetox" && npx react-native run-android
+       android:usesCleartextTraffic="true"
+
+ npm install detox --save-dev
+npm i -dev jest-circus
+npm install --include=dev jest-circus@26.6.3
+ react-native init awesome
+ detox init -r jest
+ npx detox build -c android -l verbose --cleanup
+detox test -c android -l verbose --cleanup
+ —record-logs all 
+ Build a debug apk using detox build -c android.emu.debug
+Run e2e testing detox test -c android.emu.debug
+
+describe('Example', () => {
+  beforeAll(async () => {
+   // await detox.init(config);
++    await detox.device.launchApp({ newInstance: true });
+  });
+  
+  
+  
+  package com.awesome; /* change to app package name */
+
+   import com.wix.detox.Detox;
+
+   import org.junit.Rule;
+   import org.junit.Test;
+   import org.junit.runner.RunWith;
+
+   import androidx.test.ext.junit.runners.AndroidJUnit4;
+   import androidx.test.filters.LargeTest;
+   import androidx.test.rule.ActivityTestRule;
+
+   @RunWith(AndroidJUnit4.class)
+   @LargeTest
+   public class DetoxTest {
+
+       @Rule
+       public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class, false, false);
+
+       @Test
+       public void runDetoxTests() {
+           Detox.runTests(mActivityRule);
+       }
+   }
+
+  beforeEach(async () => {
+    await device.reloadReactNative();
+  });
+
+
+  it('should have login screen', async () => {
+    await expect(element(by.id('welcome'))).toBeVisible();
+  });
+});
+
+
+
+.detoxrc.json
+{
+  "testRunner": "jest",
+  "runnerConfig": "e2e/config.json",
+  "skipLegacyWorkersInjection": true,
+  "apps": {
+    "ios": {
+      "type": "ios.app",
+      "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
+    },
+    "android": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+      "build": "cd android && gradlew app:assembleRelease assembleAndroidTest -DtestBuildType=release && cd .."
+    
+
+    },
+     "android.emu.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && ./gradlew app:assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.emulator",
+        "device": {
+          "avdName": "demotest"
+        }
+      },
+      "android.emu.release": {
+        "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
+        "build": "cd android && ./gradlew app:assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
+        "type": "android.emulator",
+        "device": {
+          "avdName": "demotest"
+        }
+      }
+  },
+  "devices": {
+    "simulator": {
+      "type": "ios.simulator",
+      "device": {
+        "type": "iPhone 11"
+      }
+    },
+    "emulator": {
+      "type": "android.emulator",
+      "device": {
+        "avdName": "demotest"
+      }
+    }
+  },
+  "configurations": {
+    "ios": {
+      "device": "simulator",
+      "app": "ios"
+    },
+    "android": {
+      "device": "emulator",
+      "app": "android"
+    },
+    "android.emu.release":{
+      "device": "emulator",
+      "app": "android.emu.release"
+    }
+  }
+}
+
+
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+      maven {
+               // All of Detox' artifacts are provided via the npm module
+               url "$rootDir/../node_modules/detox/Detox-android"
+           }
+
+
+
+
+
+To record .log files, add --record-logs all (or --record-logs failing, if you want to keep logs only for failing tests).
+To record .mp4 test run videos, add --record-videos all (or --record-videos failing, if you want to keep video recordings only for failing tests).
+To record .dtxrec (Detox Instruments recordings) for each test, add --record-performance all. To open those recordings, you’ll need Detox Instruments. NOTE: only iOS is supported.
+To capture .uihierarchy snapshots (iOS only, Xcode 12.0+) on view action failures, add --capture-view-hierarchy enabled.
+To take .png screenshots before and after each test, add --take-screenshots all (or --take-screenshots failing, if you want to keep only screenshots of failing tests).
+Alternatively, you might leverage the device.takeScreenshot() API for manual control.
+
+
+// e2e/mytest.e2e.js
+const express = require('express');
+let server;
+
+beforeAll(async () => {
+    const app = express();
+
+    app.post('/api/users/register/', (req, res) => {
+      res.status(400)
+      res.send({"email": ["Test error: Email is required!"]})
+    })
+
+    await new Promise(function(resolve) {
+        server = app.listen(9091, "127.0.0.1", function() {
+            console.log(` Running server on '${JSON.stringify(server.address())}'...`);
+            resolve();
+        });
+    });
+})
+
+afterAll(() => {
+    server.close()
+})
+
+npm install -g allure-commandline --save-dev
+
+npm install allure-commandline --save-dev
+allure generate allure-results --clean -o allure-report
+allure serve -h localhost   C:\awesome\allure-results
