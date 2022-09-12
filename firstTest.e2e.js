@@ -20,4 +20,10 @@ describe('Example', () => {
     await element(by.id('click')).tap();
     await expect(element(by.id('email'))).toHaveText('true');
   });
+
+  it('Enter name test ', async () => {
+    await expect(element(by.id('entername'))).toBeVisible();
+    await element(by.id('entername')).typeText('Raj');
+    await expect(element(by.id('enteredname'))).toHaveText('Raj');
+  });
 });
