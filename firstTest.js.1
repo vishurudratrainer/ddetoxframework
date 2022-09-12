@@ -1,0 +1,19 @@
+import {afterAll} from 'jest-circus';
+
+/* eslint-disable no-undef */
+describe('Example', () => {
+  beforeAll(async () => {
+    // await detox.init(config);
+    await detox.device.launchApp({newInstance: true});
+  });
+
+  beforeEach(async () => {
+    await device.reloadReactNative();
+  });
+
+  it('test welcome', async () => {
+    await expect(element(by.id('welcome'))).toBeVisible();
+  });
+
+ 
+});
