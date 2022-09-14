@@ -24,3 +24,8 @@ Step i
  
  Open Chrome or any other node inspector ( ndb)
  Set your break points
+
+https://github.com/wix/Detox/issues/2700
+https://github.com/wix/Detox/issues/3067
+https://github.com/wix/Detox/issues/2700
+https://github.com/wix/Detox/issues/3067
